@@ -2,7 +2,7 @@
 namespace: shortly
 
 api:
-  image: shortly-api:v1
+  image: obito991/shortly-api:v1
   replicas: 4
   resources:
     requests:
@@ -18,7 +18,7 @@ api:
     cpuPercent: 50
 
 frontend:
-  image: shortly-frontend:v1
+  image: obito991/shortly-frontend:v1
   replicas: 2
 
 worker:                    # no worker-cronjob.yaml template yet — these knobs are unused for now
