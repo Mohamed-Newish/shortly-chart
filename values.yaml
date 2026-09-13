@@ -22,7 +22,7 @@ frontend:
   replicas: 2
 
 worker:                    # no worker-cronjob.yaml template yet — these knobs are unused for now
-  image: shortly-worker:v1
+  image: obito991/shortly-worker:v1
   flushIntervalMs: 5000
 
 postgres:
