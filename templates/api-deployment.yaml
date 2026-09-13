@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app: shortly
+    component: api
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: shortly
+      component: api
+  template:
+    metadata:
+      labels:
+        app: shortly
+        component: api
+    spec:
+      serviceAccountName: api-sa       # Lab 11: dedicated SA, no API token mounted
+      securityContext:                 # pod-level hardening
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: {{ .Values.api.image }}
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: api-config
+            - secretRef:
+                name: api-secrets
+          securityContext:             # container-level hardening
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - "ALL"
+          resources: {{ toYaml .Values.api.resources | nindent 12 }}
+          livenessProbe:               # fails => RESTART the container
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:              # fails => out of the Service Endpoints, no restart
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          startupProbe:                # 30 x 2s = a 60s boot budget before liveness takes over
+            httpGet:
+              path: /health
+              port: 3000
+            failureThreshold: 30
+            periodSeconds: 2

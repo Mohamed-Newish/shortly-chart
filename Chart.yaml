@@ -1,0 +1,12 @@
+apiVersion: v2
+name: shortly
+description: A URL shortener with click analytics — api, frontend, Postgres, Redis
+
+# 'application' = a deployable chart (vs 'library', which only provides helpers).
+type: application
+
+# The CHART's own version — bump on every change to templates or values.
+version: 0.1.0
+
+# The version of the APP inside the chart, not the chart. Shown by `helm list`.
+appVersion: "1.0.0"

@@ -1,0 +1,8 @@
+# helm/shortly/values-dev.yaml — only the overrides; everything else falls back to values.yaml
+api:
+  replicas: 1
+  autoscale:
+    enabled: false         # inert until an hpa.yaml template exists — kept to match Lab 12's solution
+
+frontend:
+  replicas: 1

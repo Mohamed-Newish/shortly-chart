@@ -1,0 +1,40 @@
+# helm/shortly/values.yaml
+namespace: shortly
+
+api:
+  image: shortly-api:v1
+  replicas: 3
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
+  autoscale:               # no hpa.yaml template yet — these knobs are unused for now
+    enabled: true
+    min: 2
+    max: 8
+    cpuPercent: 50
+
+frontend:
+  image: shortly-frontend:v1
+  replicas: 2
+
+worker:                    # no worker-cronjob.yaml template yet — these knobs are unused for now
+  image: shortly-worker:v1
+  flushIntervalMs: 5000
+
+postgres:
+  image: postgres:16-alpine
+  storage: 1Gi
+
+redis:
+  image: redis:7-alpine
+  storage: 512Mi
+
+config:
+  dbName: shortly
+secrets:                 # in real life these come from --set or a secret manager, NOT git
+  dbUser: shortly
+  dbPassword: change-me
