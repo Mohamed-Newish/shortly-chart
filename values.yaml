@@ -3,7 +3,7 @@ namespace: shortly
 
 api:
   image: shortly-api:v1
-  replicas: 3
+  replicas: 4
   resources:
     requests:
       cpu: 50m
